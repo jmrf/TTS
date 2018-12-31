@@ -4,6 +4,10 @@ from synthesizer import Synthesizer
 from TTS.utils.generic_utils import load_config
 from flask import Flask, Response, request, render_template, send_file
 
+import sys
+sys.path.append('/home/jose/code_projects/Experimental')
+sys.path.append('/home/jose/code_projects/Experimental/TTS')
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '-c', '--config_path', type=str, help='path to config file for training')

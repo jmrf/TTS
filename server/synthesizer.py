@@ -5,6 +5,11 @@ import torch
 import scipy
 import numpy as np
 import soundfile as sf
+
+import sys
+sys.path.append('/home/jose/code_projects/Experimental')
+sys.path.append('/home/jose/code_projects/Experimental/TTS')
+
 from TTS.utils.text import text_to_sequence
 from TTS.utils.generic_utils import load_config
 from TTS.utils.audio import AudioProcessor
@@ -30,10 +35,10 @@ class Synthesizer(object):
             config.min_level_db,
             config.frame_shift_ms,
             config.frame_length_ms,
-            config.preemphasis,
             config.ref_level_db,
             config.num_freq,
             config.power,
+            config.preemphasis,
             griffin_lim_iters=60)
         # load model state
         if use_cuda:
@@ -49,8 +54,9 @@ class Synthesizer(object):
 
     def save_wav(self, wav, path):
         wav *= 32767 / max(1e-8, np.max(np.abs(wav)))
-        librosa.output.write_wav(path, wav.astype(np.int16),
-                                 self.config.sample_rate)
+        scipy.io.wavfile.write(path, self.config.sample_rate, wav.astype(np.int16))
+        # librosa.output.write_wav(path, wav.astype(np.int16),
+        #                          self.config.sample_rate)
 
     def tts(self, text):
         text_cleaner = [self.config.text_cleaner]
